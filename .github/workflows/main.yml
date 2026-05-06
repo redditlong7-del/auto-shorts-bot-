@@ -1,0 +1,24 @@
+name: Video Banane Wala Robot
+on:
+  repository_dispatch:
+    types: [make-video]
+jobs:
+  banao:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Tools Install Karo
+        run: |
+          pip install requests moviepy python-telegram-bot BingImageCreator
+          sudo apt-get install -y ffmpeg
+      - name: Video Banao
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          PIXVERSE_KEY: ${{ secrets.PIXVERSE_KEY }}
+          BING_COOKIE: ${{ secrets.BING_COOKIE }}
+          TOPIC: ${{ github.event.client_payload.topic }}
+          CHAT_ID: ${{ github.event.client_payload.chat_id }}
+        run: python bot.py
